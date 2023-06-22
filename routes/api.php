@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ClothBrandsController;
+use App\Http\Controllers\ClothsController;
+use App\Models\ClothBrands;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,11 +15,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/test', function(Request $request){
-    return 'Authenticated';
-});
 
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->prefix('v1')->group(function(){
+    Route::get('/user',function(Request $request){
     return $request->user();
 });
+    Route::apiresource('/clothbrands', ClothBrandsController::class);
+    Route::apiresource('/cloths', ClothsController::class);
+});
+    

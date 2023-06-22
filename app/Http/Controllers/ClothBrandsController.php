@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreClothBrandsRequest;
 use App\Http\Requests\UpdateClothBrandsRequest;
 use App\Models\ClothBrands;
+use App\Http\Resources\ClothBrandsResource;
+use App\Http\Requests\ClothBrandsRequest;
 
 class ClothBrandsController extends Controller
 {
@@ -15,7 +17,7 @@ class ClothBrandsController extends Controller
      */
     public function index()
     {
-        //
+        return ClothBrandsResource::collection(ClothBrands::all());
     }
 
     /**
@@ -36,18 +38,22 @@ class ClothBrandsController extends Controller
      */
     public function store(StoreClothBrandsRequest $request)
     {
-        //
+        $faker = \Faker\Factory::create(1);
+        $clothBrand = ClothBrands::create([
+            'name' => $faker->name
+        ]);
+        return new ClothBrandsResource($clothBrand);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ClothBrands  $clothBrands
+     * @param  \App\Models\ClothBrands  $clothBrand
      * @return \Illuminate\Http\Response
      */
-    public function show(ClothBrands $clothBrands)
+    public function show(ClothBrands $clothBrand)
     {
-        //
+        return new ClothBrandsResource($clothBrand);
     }
 
     /**
@@ -56,7 +62,7 @@ class ClothBrandsController extends Controller
      * @param  \App\Models\ClothBrands  $clothBrands
      * @return \Illuminate\Http\Response
      */
-    public function edit(ClothBrands $clothBrands)
+    public function edit(ClothBrands $clothBrand)
     {
         //
     }
@@ -68,9 +74,12 @@ class ClothBrandsController extends Controller
      * @param  \App\Models\ClothBrands  $clothBrands
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateClothBrandsRequest $request, ClothBrands $clothBrands)
+    public function update(UpdateClothBrandsRequest $request, ClothBrands $clothBrand)
     {
-        //
+        $clothBrand->update([
+            'name' =>$request->input('name')
+        ]);
+        return new ClothBrandsResource($clothBrand);
     }
 
     /**
@@ -79,8 +88,9 @@ class ClothBrandsController extends Controller
      * @param  \App\Models\ClothBrands  $clothBrands
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClothBrands $clothBrands)
+    public function destroy(ClothBrands $clothBrand)
     {
-        //
+        $clothBrand->delete();
+        return response(null, 204);
     }
 }
